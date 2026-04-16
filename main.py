@@ -1,3 +1,6 @@
+import json
+import os
+
 tasks = []
 
 
@@ -83,6 +86,31 @@ def delete_task():
 		print("ยกเลิกการลบ")
 
 
+def save_tasks(filename="tasks.json"):
+	try:
+		with open(filename, "w", encoding="utf-8") as f:
+			json.dump(tasks, f, ensure_ascii=False, indent=2)
+	except Exception as e:
+		print(f"ไม่สามารถบันทึกไฟล์: {e}")
+
+
+def load_tasks(filename="tasks.json"):
+	global tasks
+	if not os.path.exists(filename):
+		tasks = []
+		return
+	try:
+		with open(filename, "r", encoding="utf-8") as f:
+			data = json.load(f)
+			if isinstance(data, list):
+				tasks = data
+			else:
+				tasks = []
+	except Exception as e:
+		print(f"ไม่สามารถโหลดไฟล์: {e}")
+		tasks = []
+
+
 def main_menu():
 	while True:
 		print("เมนูหลัก:")
@@ -108,4 +136,8 @@ def main_menu():
 
 
 if __name__ == "__main__":
-	main_menu()
+	load_tasks()
+	try:
+		main_menu()
+	finally:
+		save_tasks()
