@@ -24,8 +24,35 @@ def view_tasks():
 	pass
 
 
-def edit_task():
-	pass
+def update_task():
+	if not tasks:
+		print("ยังไม่มีงานในรายการ")
+		return
+	try:
+		idx_str = input("เลือกลำดับงานที่ต้องการแก้ไข: ").strip()
+		idx = int(idx_str)
+	except ValueError:
+		print("ตัวเลขไม่ถูกต้อง")
+		return
+	if idx < 1 or idx > len(tasks):
+		print("index ไม่ถูกต้อง")
+		return
+	task = tasks[idx - 1]
+	new_title = input(f"ชื่องาน ({task.get('title')}): ").strip()
+	if new_title:
+		task['title'] = new_title
+	new_description = input(f"รายละเอียด ({task.get('description')}): ").strip()
+	if new_description:
+		task['description'] = new_description
+	new_due = input(f"วันครบกำหนด ({task.get('due_date')}): ").strip()
+	if new_due:
+		task['due_date'] = new_due
+	new_comp = input(f"สถานะเสร็จแล้ว? (y/n) [ปัจจุบัน: {'y' if task.get('complete') else 'n'}]: ").strip().lower()
+	if new_comp == 'y':
+		task['complete'] = True
+	elif new_comp == 'n':
+		task['complete'] = False
+	print(f"ปรับปรุงงาน id={task.get('id')} เรียบร้อย")
 
 
 def delete_task():
@@ -46,7 +73,7 @@ def main_menu():
 		elif choice == "2":
 			view_tasks()
 		elif choice == "3":
-			edit_task()
+			update_task()
 		elif choice == "4":
 			delete_task()
 		elif choice == "5":
