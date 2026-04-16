@@ -62,7 +62,25 @@ def update_task():
 
 
 def delete_task():
-	pass
+	if not tasks:
+		print("ยังไม่มีงานในรายการ")
+		return
+	try:
+		idx_str = input("เลือกลำดับงานที่ต้องการลบ: ").strip()
+		idx = int(idx_str)
+	except ValueError:
+		print("ตัวเลขไม่ถูกต้อง")
+		return
+	if idx < 1 or idx > len(tasks):
+		print("index ไม่ถูกต้อง")
+		return
+	task = tasks[idx - 1]
+	confirm = input("ต้องการลบงานนี้จริงหรือไม่ (y/n): ").strip().lower()
+	if confirm == 'y':
+		removed = tasks.pop(idx - 1)
+		print(f"ลบงาน id={removed.get('id')} เรียบร้อย")
+	else:
+		print("ยกเลิกการลบ")
 
 
 def main_menu():
